@@ -26,3 +26,9 @@
 *.exe
 *.out
 *.app
+
+# Emacs backups
+*~
+
+# Automake intermediate
+Makefile.in
