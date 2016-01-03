@@ -40,6 +40,8 @@ std::string ShaderProgram::read_code(string fn)
 
 void ShaderProgram::compile(string path, GLuint kind)
 {
+  LOG4CXX_INFO( logger, "Compiling " << path);
+  
   string code = read_code( path);
   GLuint id = glCreateShader( kind);
   
@@ -56,7 +58,7 @@ void ShaderProgram::compile(string path, GLuint kind)
   glGetShaderiv(id, GL_INFO_LOG_LENGTH, &len);
   if ( len > 0 ) {
     glGetShaderInfoLog(id, len, NULL, msg);
-    printf("%s\n", msg);
+    LOG4CXX_ERROR(logger, msg);
   }
 
   obj_ids.push_back( id);
@@ -113,7 +115,11 @@ ShaderProgram *ShaderProgramFactory::_get(std::string name)
       prog->load_from_source( "/home/larry/mcpe-view/shaders/color.vs", "/home/larry/mcpe-view/shaders/color.fs" );
     }
     if( name == "texture") {
-      prog->load_from_source( "/home/larry/mcpe-view/shaders/SimpleVertexShader.vertexshader", "/home/larry/mcpe-view/shaders/SimpleFragmentShader.fragmentshader");
+      prog->load_from_source( "/home/larry/mcpe-view/shaders/texture.vs", "/home/larry/mcpe-view/shaders/texture.fs");
+    }
+    
+    if( name == "light") {
+      prog->load_from_source( "/home/larry/mcpe-view/shaders/light.vs", "/home/larry/mcpe-view/shaders/light.fs");
     }
     
     LOG4CXX_INFO( logger, "Finished");

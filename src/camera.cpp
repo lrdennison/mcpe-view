@@ -33,18 +33,18 @@ void Camera::update()
 
   glm::vec3 head_dir( 0, 1, 0);
 
-  glm::mat4 View = glm::lookAt(
-			       location, // Camera is at (4,3,3), in World Space
-			       location+direction, // e origin
-			       head_dir  // Head is up (set to 0,-1,0 to look upside-down)
-			       );
+  view = glm::lookAt(
+		     location, // Camera is at (4,3,3), in World Space
+		     location+direction, // e origin
+		     head_dir  // Head is up (set to 0,-1,0 to look upside-down)
+		     );
 
  
   // Model matrix : an identity matrix (model will be at the origin)
-  glm::mat4 Model = glm::mat4(1.0f);
+  model = glm::mat4(1.0f);
 
   // Our ModelViewProjection : multiplication of our 3 matrices
-  mvp = Projection * View * Model; // Remember, matrix multiplication is the other way around
+  mvp = Projection * view * model; // Remember, matrix multiplication is the other way around
 
   if( mode_2D) {
     // left, right, bottom (y), top (y)

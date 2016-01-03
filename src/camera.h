@@ -12,6 +12,8 @@ class Camera {
   int width;
   int height;
 
+  glm::mat4 model;
+  glm::mat4 view;
   glm::mat4 mvp;
   glm::vec3 direction;
 

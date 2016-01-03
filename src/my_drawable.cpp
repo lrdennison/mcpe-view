@@ -8,6 +8,7 @@ using namespace glm;
 
 void MyDrawable::setup()
 {
+  /*
   vs.textureShader = new BlockShader();
   
   Block b1, b2;
@@ -24,7 +25,7 @@ void MyDrawable::setup()
 
   // colorShader->move_data_to_buffers();
   vs.textureShader->move_data_to_buffers();
-
+  */
 }
 
 
@@ -33,7 +34,7 @@ void MyDrawable::setup()
 void MyDrawable::draw()
 {
   // colorShader->draw();
-  vs.textureShader->draw();
+  // pvs.textureShader->draw();
 
 }
 

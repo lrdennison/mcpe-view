@@ -3,31 +3,12 @@
 
 TextureShader::TextureShader()
 {
-  program = ShaderProgramFactory::get("texture");
-
-  glGenBuffers(1, &vertexbuffer);
-  glGenBuffers(1, &uvbuffer);
-
-  mvp_uloc = glGetUniformLocation(program->id, "MVP");
-  texture_uloc = glGetUniformLocation(program->id, "myTextureSampler");
-
-  // texture = loadBMP_custom("textures/terrain-atlas.bmp");
+  use_texture();
+  //use_normal();
 }
 
 
-void TextureShader::move_data_to_buffers()
-{
-  num_vertices = vertices.size();
-  
-  glBindBuffer(GL_ARRAY_BUFFER, vertexbuffer);
-  glBufferData(GL_ARRAY_BUFFER, vertices.size() * sizeof(glm::vec4), &vertices[0], GL_STATIC_DRAW);
-  vertices.clear();
-
-  glBindBuffer(GL_ARRAY_BUFFER, uvbuffer);
-  glBufferData(GL_ARRAY_BUFFER, uv.size() * sizeof(glm::vec2), &uv[0], GL_STATIC_DRAW);
-  uv.clear();
-}
- 
+/*
 void TextureShader::draw()
 {
   glUseProgram(program->id);
@@ -67,3 +48,4 @@ void TextureShader::draw()
   glDisableVertexAttribArray(2);
 
 }
+*/

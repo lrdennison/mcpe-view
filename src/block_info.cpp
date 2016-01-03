@@ -47,7 +47,7 @@ BlockInfo raw_block_info[] = {
 Cube cube;
 
 
-static void render_cube(Vertices &v_out, UVs &uv_out, glm::mat4 &xform, unsigned int show_side, UVS *uvsa[6])
+static void render_cube(Shader *shader, glm::mat4 &xform, unsigned int show_side, UVS *uvsa[6])
 {
   for(int vx=0; vx<36; vx++) {
     int side = vx / 6;
@@ -55,7 +55,7 @@ static void render_cube(Vertices &v_out, UVs &uv_out, glm::mat4 &xform, unsigned
       continue;
 	  
     glm::vec4 loc = xform * cube.xyz[vx];
-    v_out.push_back( loc);
+    shader->vertices.push_back( loc);
     UV uv = cube.uv[vx];
     UV nuv = uv;
 
@@ -68,7 +68,12 @@ static void render_cube(Vertices &v_out, UVs &uv_out, glm::mat4 &xform, unsigned
     if( uv.y > 0.9)
       nuv.y = 1.0-uvsa[side]->v0;
     
-    uv_out.push_back( nuv);
+    shader->uv.push_back( nuv);
+
+    shader->normal.push_back( cube.normal[vx]);
+
+    assert( shader->vertices.size() == shader->uv.size());
+    assert( shader->vertices.size() == shader->normal.size());
   }
 }
 
@@ -98,7 +103,7 @@ static void render_generic(BLOCK_RENDER_ARGS)
   uvsa[4] = &uvs;
   uvsa[5] = &uvs;
  	
-  render_cube(v_out, uv_out, xform, pb->show_side, uvsa);
+  render_cube(shader, xform, pb->show_side, uvsa);
 }
 
 #define PREAMBLE \
@@ -120,7 +125,7 @@ static void render_grass(BLOCK_RENDER_ARGS)
   uvsa[4] = &atlas_item->uvs[2];
   uvsa[5] = &atlas_item->uvs[2];
  	
-  render_cube(v_out, uv_out, xform, pb->show_side, uvsa);
+  render_cube(shader, xform, pb->show_side, uvsa);
 }
 
 
@@ -138,7 +143,7 @@ static void render_leaves(BLOCK_RENDER_ARGS)
   uvsa[5] = &atlas_item->uvs[i];
 
   // printf( "leave data: %d\n", pb->data);
-  render_cube(v_out, uv_out, xform, pb->show_side, uvsa);
+  render_cube(shader, xform, pb->show_side, uvsa);
 }
 
 
@@ -163,8 +168,8 @@ static void render_log(BLOCK_RENDER_ARGS)
   uvsa[4] = &ai->uvs[i+1];
   uvsa[5] = &ai->uvs[i+1];
 
-  printf( "log data: %d\n", pb->data);
-  render_cube(v_out, uv_out, xform, pb->show_side, uvsa);
+  // printf( "log data: %d\n", pb->data);
+  render_cube(shader, xform, pb->show_side, uvsa);
 }
 
 
@@ -179,7 +184,7 @@ static void render_pumpkin(BLOCK_RENDER_ARGS)
   uvsa[4] = &atlas_item->uvs[0];
   uvsa[5] = &atlas_item->uvs[0];
  	
-  render_cube(v_out, uv_out, xform, pb->show_side, uvsa);
+  render_cube(shader, xform, pb->show_side, uvsa);
 }
 
 
@@ -193,7 +198,7 @@ static void render_use_data_as_uvs_index(BLOCK_RENDER_ARGS)
     uvsa[ix] = &uvs;
   }
  	
-  render_cube(v_out, uv_out, xform, pb->show_side, uvsa);
+  render_cube(shader, xform, pb->show_side, uvsa);
 }
 
 

@@ -3,17 +3,16 @@
 
 #include "common.h"
 #include "camera.h"
-#include "shader_program.h"
+#include "shader.h"
 
-class TextureShader {
+class TextureShader :public Shader {
 public:
-  std::vector<glm::vec4> vertices;
-  std::vector<glm::vec2> uv;
   
   TextureShader();
-  void move_data_to_buffers();
-  void draw();
+  // void move_data_to_buffers();
+  // void draw();
 
+  /*
 protected:
   ShaderProgram *program;
 
@@ -25,6 +24,7 @@ protected:
   GLuint texture_uloc;
 
   GLuint texture;
+  */
 };
 
 #endif

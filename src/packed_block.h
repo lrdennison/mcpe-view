@@ -17,10 +17,10 @@ struct PackedBlock
   unsigned int show_side : 6;
 
   static const
-  unsigned int xm=0x01,
+  unsigned int zp=0x01,
     xp=0x02,
     zm=0x04,
-    zp=0x08,
+    xm=0x08,
     ym=0x10,
     yp=0x20,
     all=0x3F,

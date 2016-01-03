@@ -5,7 +5,7 @@
 #include "packed_block.h"
 #include "terrain_chunk.h"
 
-#define BLOCK_RENDER_ARGS Vertices &v_out, UVs &uv_out, glm::mat4 &xform, class BlockInfo *bip, PackedBlock *pb, ColumnInfo *ci
+#define BLOCK_RENDER_ARGS Shader *shader, glm::mat4 &xform, class BlockInfo *bip, PackedBlock *pb, ColumnInfo *ci
 typedef void BlockRenderFunc( BLOCK_RENDER_ARGS );
 
 

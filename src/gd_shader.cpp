@@ -6,6 +6,8 @@ GdShader::GdShader(int width, int height)
 {
   LOG4CXX_INFO(logger, "constructor");
 
+  use_program("texture");
+
   glGenTextures(1, &texture);
 
   this->width = width;
@@ -17,6 +19,8 @@ GdShader::GdShader(int width, int height)
 
 void GdShader::move_data_to_buffers()
 {
+  LOG4CXX_DEBUG(logger, "move_data_to_buffers");
+  
   vertices.clear();
   uv.clear();
 
@@ -51,7 +55,6 @@ void GdShader::move_data_to_buffers()
     }
   }
 		
-  // "Bind" the newly created texture : all future texture functions will modify this texture
   glBindTexture(GL_TEXTURE_2D, texture);
   // Give the image to OpenGL
   glTexImage2D(GL_TEXTURE_2D, 0,GL_RGBA, width, height, 0, GL_RGBA, GL_UNSIGNED_BYTE, ndata);

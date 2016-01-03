@@ -27,11 +27,6 @@ using namespace glm;
 
 class VertexStream {
  public:
-  /*
-  std::vector<vec4> vertices;
-  std::vector<vec2> uv;
-  */
-  
   class ColorShader *colorShader;
   class BlockShader *textureShader;
 };

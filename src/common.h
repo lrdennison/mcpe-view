@@ -40,6 +40,7 @@ using namespace log4cxx::helpers;
 // Include GLM
 #include <glm/glm.hpp>
 #include <glm/gtc/matrix_transform.hpp>
+#include <glm/gtx/transform.hpp>
 
 #include <GL/glut.h>
 
@@ -52,9 +53,11 @@ using namespace log4cxx::helpers;
 
 typedef glm::vec4 Vertex;
 typedef glm::vec2 UV;
+typedef glm::vec3 Normal;
 
 typedef std::vector<Vertex> Vertices;
 typedef std::vector<UV> UVs;
+typedef std::vector<Normal> Normals;
 
 
 class Exc : public std::exception {

@@ -15,6 +15,7 @@ class Cube : public BasicModel {
 
   glm::vec4 xyz[36];
   glm::vec2 uv[36];
+  glm::vec3 normal[36];
   
   Cube();
   void render( VertexStream &vs, glm::mat4 &xform, UVS &uvs);

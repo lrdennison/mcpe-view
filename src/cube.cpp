@@ -50,7 +50,28 @@ void Cube::mk_face( GLfloat d0[], GLfloat d1[], GLfloat d2[], GLfloat d2v)
 
   face_cnt++;
 }
-  
+
+class FV {
+public:
+  Vertex vertex;
+  UV uv;
+  glm::vec4 normal;
+};
+
+//The unit face should have a normal towards Z+
+static FV unit_face[] = {
+  // x    y    z    w     u    v
+  {{0.0, 0.0, 0.0, 1.0},  {0.0, 0.0}, {0.0, 0.0, 1.0, 0.0}},
+  {{1.0, 0.0, 0.0, 1.0},  {1.0, 0.0}, {0.0, 0.0, 1.0, 0.0}},
+  {{1.0, 1.0, 0.0, 1.0},  {1.0, 1.0}, {0.0, 0.0, 1.0, 0.0}},
+
+  // x    y    z    w     u    v
+  {{1.0, 1.0, 0.0, 1.0},  {1.0, 1.0}, {0.0, 0.0, 1.0, 0.0}},
+  {{0.0, 1.0, 0.0, 1.0},  {0.0, 1.0}, {0.0, 0.0, 1.0, 0.0}},
+  {{0.0, 0.0, 0.0, 1.0},  {0.0, 0.0}, {0.0, 0.0, 1.0, 0.0}},
+};
+
+
 Cube::Cube()
 {
   cnt = 0;
@@ -72,7 +93,60 @@ Cube::Cube()
     uv[ix].x = u[ix];
     uv[ix].y = v[ix];
   }
-    
+
+  static bool print_it = true;
+  // New way
+  FV reference_face[6];
+  glm::vec3 loc(-0.5f,-0.5f, 0.5f);
+  glm::mat4 mat(1.0f);
+  mat = glm::translate(mat, loc);
+
+  for( int ix=0; ix<6; ix++) {
+    reference_face[ix] = unit_face[ix];
+    Vertex v = reference_face[ix].vertex;
+    v = mat*v;
+    reference_face[ix].vertex = v;
+
+    if( print_it) {
+      printf("ref %d: %f %f %f\n", ix, v.x, v.y, v.z);
+    }
+  }
+
+  glm::vec3 axis_x(1, 0, 0);
+  glm::vec3 axis_y(0, 1, 0);
+  glm::vec3 axis_z(0, 0, 1);
+
+  FV all[36];
+  int cnt=0;
+  for(int side=0; side<6; side++) {
+    if( side < 4)
+      mat = glm::rotate(glm::mat4(1.0f), glm::radians(90.0f*side), axis_y);
+    if( side == 4)
+      mat = glm::rotate(glm::mat4(1.0f), glm::radians(90.0f), axis_x);
+    if( side == 5)
+      mat = glm::rotate(glm::mat4(1.0f), glm::radians(270.0f), axis_x);
+
+    for( int ix=0; ix<6; ix++) {
+      all[cnt] = reference_face[ix];
+      Vertex v = all[cnt].vertex;
+      v = mat*v;
+      all[cnt].vertex = v;
+
+      all[cnt].normal = mat*all[cnt].normal;
+      
+      if( print_it) {
+	printf("all %d: %f %f %f\n", cnt, v.x, v.y, v.z);
+      }
+      xyz[cnt] = all[cnt].vertex;
+      uv[cnt] = all[cnt].uv;
+      normal[cnt].x = all[cnt].normal.x;
+      normal[cnt].y = all[cnt].normal.y;
+      normal[cnt].z = all[cnt].normal.z;
+      cnt++;
+    }
+  }
+ 
+  print_it = false;
 }
 
 

@@ -3,5 +3,7 @@
 
 BlockShader::BlockShader()
 {
+  use_program("light");
+  use_normal();
   texture = TextureFactory::get("terrain");
 }

@@ -3,6 +3,7 @@ bin_PROGRAMS = minedit
 minedit_SOURCES = main.cpp
 minedit_SOURCES += database.h
 minedit_SOURCES += shader_program.cpp shader_program.h
+minedit_SOURCES += shader.cpp shader.h
 minedit_SOURCES += color_shader.cpp color_shader.h
 minedit_SOURCES += texture_shader.cpp texture_shader.h
 minedit_SOURCES += block_shader.cpp block_shader.h
@@ -32,6 +33,3 @@ AM_LDFLAGS =  -ggdb
 LDADD = 
 LDADD += -L../leveldb-mcpe -L../common
 LDADD += -lglfw -lGL -lGLEW -lglut -lz -lsnappy -lpthread -lgd -llog4cxx ../leveldb-mcpe/libleveldb.a ../common/libcommon.a
-
-
-

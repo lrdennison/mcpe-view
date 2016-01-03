@@ -74,8 +74,9 @@ void TerrainChunk::setup()
     shader->colors.push_back( red);
   }
 
-  Cube cube;
-  
+  assert( bshader->vertices.size() == bshader->uv.size());
+  assert( bshader->vertices.size() == bshader->normal.size());
+
   int ix=0;
   for( int dx=0; dx<16; dx++) {
     for( int dz=0; dz<16; dz++) {
@@ -97,54 +98,20 @@ void TerrainChunk::setup()
 	glm::mat4 xform = glm::mat4( 1.0f);
 	xform = glm::translate( xform, pos);
 
-	bip->render_func( bshader->vertices, bshader->uv,
-			  xform, bip, pb, 0);
-
-	/*
-	auto meta_item = bip->meta_item;
-	if( !meta_item)
-	  continue;
-
-
-	UVS uvs = meta_item->uvs[0];
-	if( bip->use_data_as_uvs_index) {
-	  uvs = meta_item->uvs[pb->data];
-	}
-
-	// FIXME override grass...
-	if( id==0x02) {
-	  uvs = meta_item->uvs[2];
-	}
+	bip->render_func( bshader, xform, bip, pb, 0);
 	
-	for(int vx=0; vx<36; vx++) {
-	  int side = vx / 6;
-	  if( !(pb->show_side & (0x1 << side)))
-	    continue;
-	  
-	  glm::vec4 loc = xform * cube.xyz[vx];
-	  bshader->vertices.push_back( loc);
-	  vec2 uv = cube.uv[vx];
-	  vec2 nuv = uv;
-
-	  if( uv.x < 0.1)
-	    nuv.x = uvs.u0;
-	  if( uv.x > 0.9)
-	    nuv.x = uvs.u1;
-	  if( uv.y < 0.1)
-	    nuv.y = 1.0-uvs.v1;
-	  if( uv.y > 0.9)
-	    nuv.y = 1.0-uvs.v0;
-    
-	  bshader->uv.push_back( nuv);
-	}
-	*/
       }
     }
   }
 
 
   shader->move_data_to_buffers();
+
+  assert( bshader->vertices.size() == bshader->uv.size());
+  assert( bshader->vertices.size() == bshader->normal.size());
+  LOG4CXX_INFO( logger, "before");
   bshader->move_data_to_buffers();
+  LOG4CXX_INFO( logger, "after");
 }
 
 void TerrainChunk::draw()
