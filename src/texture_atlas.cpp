@@ -157,6 +157,10 @@ void TextureAtlas::load()
     
     for( int i=0; i<mi->uvs.size(); i++ ) {
       UVS *uvs = &mi->uvs[i];
+
+      uvs->tile_x = round( snap( uvs->u0) * 32.0f);
+      uvs->tile_y = round( snap( uvs->v0) * 16.0f);
+      
       uvs->u0 = snap( uvs->u0) + 0.5/2048.0;
       uvs->u1 = snap( uvs->u1) - 0.5/2048.0;
       uvs->v0 = snap( uvs->v0) + 0.5/1024.0;

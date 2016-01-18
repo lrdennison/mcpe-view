@@ -24,7 +24,8 @@ std::string ShaderProgram::read_code(string fn)
 {
   // Read the shader code from the file
   string code;
-  ifstream s(fn, std::ios::in);
+  string rfn = root_dir + "shaders/" + fn;
+  ifstream s(rfn, std::ios::in);
   if(s.is_open()){
     string line = "";
     while(getline(s, line))
@@ -112,14 +113,14 @@ ShaderProgram *ShaderProgramFactory::_get(std::string name)
     prog = new ShaderProgram();
     
     if( name == "color") {
-      prog->load_from_source( "/home/larry/mcpe-view/shaders/color.vs", "/home/larry/mcpe-view/shaders/color.fs" );
+      prog->load_from_source( "color.vs", "color.fs" );
     }
     if( name == "texture") {
-      prog->load_from_source( "/home/larry/mcpe-view/shaders/texture.vs", "/home/larry/mcpe-view/shaders/texture.fs");
+      prog->load_from_source( "texture.vs", "texture.fs");
     }
     
     if( name == "light") {
-      prog->load_from_source( "/home/larry/mcpe-view/shaders/light.vs", "/home/larry/mcpe-view/shaders/light.fs");
+      prog->load_from_source( "light.vs", "light.fs");
     }
     
     LOG4CXX_INFO( logger, "Finished");

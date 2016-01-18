@@ -86,9 +86,6 @@ void TerrainChunk::setup()
 	  continue;
 	
 	int id = pb->id;
-	if( id == 103) {
-	  LOG4CXX_INFO(logger, "Found a melon");
-	}
 	
 	auto bip = BlockInfoBase::get(id);
 	if( !bip)
@@ -99,6 +96,15 @@ void TerrainChunk::setup()
 	xform = glm::translate( xform, pos);
 
 	bip->render_func( bshader, xform, bip, pb, 0);
+
+	int priority = 3;
+	if(bip->is_solid) {
+	  priority=0;
+	}
+	
+	while( bshader->priority.size() < bshader->vertices.size()) {
+	  bshader->priority.push_back( priority);
+	}
 	
       }
     }
@@ -109,18 +115,16 @@ void TerrainChunk::setup()
 
   assert( bshader->vertices.size() == bshader->uv.size());
   assert( bshader->vertices.size() == bshader->normal.size());
-  LOG4CXX_INFO( logger, "before");
   bshader->move_data_to_buffers();
-  LOG4CXX_INFO( logger, "after");
 }
 
-void TerrainChunk::draw()
+void TerrainChunk::draw(int pri)
 {
   if( load_state != loaded)
     return;
   
   //shader->draw();
-  bshader->draw();
+  bshader->draw(pri);
 }
 
 void TerrainChunk::teardown()

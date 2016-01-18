@@ -51,7 +51,7 @@ void GdShader::move_data_to_buffers()
       *p++ = (pixel >> 16) & 0xFF;
       *p++ = (pixel >>  8) & 0xFF;
       *p++ = (pixel >>  0) & 0xFF;
-      *p++ = 0x80;
+      *p++ = 0xFF;
     }
   }
 		

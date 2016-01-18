@@ -16,13 +16,16 @@ uint64_t gettid()
 
 TextureAtlas *terrain_atlas;
 Camera *camera;
+std::string root_dir;
 
 static LoggerPtr logger(Logger::getLogger("MyApp"));
 
 int main(int arg, char **argv)
 {
+  root_dir = "/home/larry/mcpe-view/";
+  
   //BasicConfigurator::configure();
-  PropertyConfigurator::configure("src/logging.conf");
+  PropertyConfigurator::configure(root_dir + "src/logging.conf");
   
   LOG4CXX_INFO(logger, "Entering application.")
 

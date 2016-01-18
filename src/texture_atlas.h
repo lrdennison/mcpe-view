@@ -5,6 +5,8 @@
 
 struct UVS {
   float u0, v0, u1, v1, s0, s1;
+
+  unsigned int tile_x, tile_y;
 };
 
 struct AtlasItem {

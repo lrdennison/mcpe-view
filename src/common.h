@@ -73,5 +73,6 @@ class Exc : public std::exception {
 extern class TextureAtlas *terrain_atlas;
 extern class Camera *camera;
 
+extern std::string root_dir;
 
 #endif

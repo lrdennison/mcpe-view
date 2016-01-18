@@ -36,6 +36,9 @@ void Viewer::init()
   init_window();
   init_glew();
   init_vao();
+
+  const unsigned char *s = glGetString(GL_VERSION);
+  printf( "openGL version is %s\n", s);
 }
 
 static void resize_callback( GLFWwindow *window, int width, int height)

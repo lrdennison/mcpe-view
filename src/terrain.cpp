@@ -210,8 +210,11 @@ void Terrain::draw()
     cnt = 0;
   }
 
-  for( auto tc : m) {
-    tc.second->draw();
+  for( int pri=0; pri<Shader::num_pri; pri++) {
+    for( auto tuple : m) {
+      TerrainChunk *tc = tuple.second;
+      tc->draw( pri);
+    }
   }
 
 }

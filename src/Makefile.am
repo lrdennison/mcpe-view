@@ -13,6 +13,7 @@ minedit_SOURCES += cube.cpp cube.h
 minedit_SOURCES += block.cpp block.h
 minedit_SOURCES += viewer.cpp viewer.h
 minedit_SOURCES += texture_atlas.cpp texture_atlas.h
+minedit_SOURCES += texture_factory.cpp texture_factory.h
 minedit_SOURCES += camera.cpp camera.h
 
 

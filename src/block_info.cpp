@@ -13,8 +13,8 @@ BlockInfo raw_block_info[] = {
   {0x06, "sapling", false, false},
   {0x07, "bedrock", true, false},
 
-  {0x08, "water", false, false},
-  {0x09, "stationary_water", false, false},
+  {0x08, "flowing_water", true, false},
+  {0x09, "still_water", true, false},
   {0x0A, "lava", false, false},
   {0x0B, "stationary_lava", false, false},
 
@@ -40,6 +40,7 @@ BlockInfo raw_block_info[] = {
   {0x56, "pumpkin", true, false},
   {0x3C, "farmland", true, false},
 
+  {52, "mob_spawner", true, false},
   {58, "crafting_table", true, false},
   {103, "melon", true, false},
 };
@@ -58,19 +59,15 @@ static void render_cube(Shader *shader, glm::mat4 &xform, unsigned int show_side
     shader->vertices.push_back( loc);
     UV uv = cube.uv[vx];
     UV nuv = uv;
-
-    if( uv.x < 0.1)
-      nuv.x = uvsa[side]->u0;
-    if( uv.x > 0.9)
-      nuv.x = uvsa[side]->u1;
-    if( uv.y < 0.1)
-      nuv.y = 1.0-uvsa[side]->v1;
-    if( uv.y > 0.9)
-      nuv.y = 1.0-uvsa[side]->v0;
     
     shader->uv.push_back( nuv);
 
     shader->normal.push_back( cube.normal[vx]);
+
+    //glm::vec2 tile( uvsa[side]->u0, uvsa[side]->v0);
+    glm::vec2 tile( (float)uvsa[side]->tile_x, (float)uvsa[side]->tile_y);
+    
+    shader->tile.push_back( tile);
 
     assert( shader->vertices.size() == shader->uv.size());
     assert( shader->vertices.size() == shader->normal.size());
@@ -86,14 +83,6 @@ static void render_generic(BLOCK_RENDER_ARGS)
     return;
 
   UVS uvs = atlas_item->uvs[0];
-  if( bip->use_data_as_uvs_index) {
-    uvs = atlas_item->uvs[pb->data];
-  }
-
-  // FIXME override grass...
-  if( id==0x02) {
-    uvs = atlas_item->uvs[2];
-  }
 
   UVS *uvsa[6];
   uvsa[0] = &uvs;

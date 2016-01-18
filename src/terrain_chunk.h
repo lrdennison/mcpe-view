@@ -38,7 +38,7 @@ public:
   void load();
 
   void setup();
-  void draw();
+  void draw(int pri=0);
   void teardown();
 
 private:

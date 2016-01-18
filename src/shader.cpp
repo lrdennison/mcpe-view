@@ -8,6 +8,7 @@ Shader::Shader()
   _color = false;
   _normal = false;
   _uv = false;
+  _tile = false;
 
 
   glGenBuffers(1, &vertexbuffer);
@@ -46,6 +47,12 @@ void Shader::use_uv()
   glGenBuffers(1, &uvbuffer);
 }
 
+void Shader::use_tile()
+{
+  _tile = true;
+  glGenBuffers(1, &tilebuffer);
+}
+
 
 
 void Shader::use_texture()
@@ -55,41 +62,74 @@ void Shader::use_texture()
 }
 
 
+template<class T>
+void Shader::move_to_buffer(GLuint buffer, std::vector<T> &v)
+{
+  std::vector<T> sorted;
+  
+  for( int pri=0; pri<8; pri++) {
+    for( int ix=0; ix<v.size(); ix++) {
+      if( priority[ix] == pri) {
+	sorted.push_back( v[ix]);
+      }
+    }
+  }
+  
+  glBindBuffer(GL_ARRAY_BUFFER, buffer);
+  glBufferData(GL_ARRAY_BUFFER, sorted.size() * sizeof(T), &sorted[0], GL_STATIC_DRAW);
+}
+
 
 void Shader::move_data_to_buffers()
 {
   num_vertices = vertices.size();
+  while( priority.size() < num_vertices) {
+    priority.push_back( 0);
+  }
+
+  for( int ix=0; ix<num_pri; ix++) {
+    pri_cnts[ix] = 0;
+  }
   
-  glBindBuffer(GL_ARRAY_BUFFER, vertexbuffer);
-  glBufferData(GL_ARRAY_BUFFER, vertices.size() * sizeof(glm::vec4), &vertices[0], GL_STATIC_DRAW);
+  for( int ix=0; ix<num_vertices; ix++) {
+    pri_cnts[ priority[ix]]++;
+  }
+
+  move_to_buffer( vertexbuffer, vertices);
+  // glBufferData(GL_ARRAY_BUFFER, vertices.size() * sizeof(glm::vec4), &vertices[0], GL_STATIC_DRAW);
 
   if( _uv) {
     assert( uv.size() == num_vertices);
-    glBindBuffer(GL_ARRAY_BUFFER, uvbuffer);
-    glBufferData(GL_ARRAY_BUFFER, uv.size() * sizeof(glm::vec2), &uv[0], GL_STATIC_DRAW);
+    move_to_buffer( uvbuffer, uv);
   }
 
   if( _color) {
     assert( color.size() == num_vertices);
-    glBindBuffer(GL_ARRAY_BUFFER, colorbuffer);
-    glBufferData(GL_ARRAY_BUFFER, color.size() * sizeof(glm::vec3), &color[0], GL_STATIC_DRAW);
+    move_to_buffer( colorbuffer, color);
   }
 
   if( _normal) {
     assert( normal.size() == num_vertices);
-    glBindBuffer(GL_ARRAY_BUFFER, normalbuffer);
-    glBufferData(GL_ARRAY_BUFFER, normal.size() * sizeof(glm::vec3), &normal[0], GL_STATIC_DRAW);
+    move_to_buffer( normalbuffer, normal);
+  }
+  
+  if( _tile) {
+    assert( tile.size() == num_vertices);
+    move_to_buffer( tilebuffer, tile);
   }
   
   vertices.clear();
   uv.clear();
   color.clear();
   normal.clear();
+  tile.clear();
+  priority.clear();
 }
  
 
 
-void Shader::draw()
+
+void Shader::draw(int pri)
 {
   glUseProgram(program->id);
 
@@ -165,11 +205,30 @@ void Shader::draw()
 			  );
   }
 
-  glDrawArrays(GL_TRIANGLES, 0, num_vertices); // 3 indices starting at 0 -> 1 triangle
+  if( _tile) {
+    glEnableVertexAttribArray(4);
+    glBindBuffer(GL_ARRAY_BUFFER, tilebuffer);
+    glVertexAttribPointer(
+			  4,                  // attribute 3
+			  2,                  // size
+			  GL_FLOAT,	      // type
+			  GL_FALSE,           // normalized?
+			  0,                  // stride
+			  (void*)0            // array buffer offset
+			  );
+  }
+
+  int offset = 0;
+  for( int ix=0; ix<pri; ix++) {
+    offset += pri_cnts[ix];
+  }
+  
+  glDrawArrays(GL_TRIANGLES, offset, pri_cnts[pri]); // 3 indices starting at 0 -> 1 triangle
     
   glDisableVertexAttribArray(0);
   glDisableVertexAttribArray(1);
   glDisableVertexAttribArray(2);
   glDisableVertexAttribArray(3);
+  glDisableVertexAttribArray(4);
 
 }
