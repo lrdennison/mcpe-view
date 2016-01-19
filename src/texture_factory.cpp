@@ -243,7 +243,7 @@ GLuint TextureFactory::_get(std::string name)
   if( m.find( name) == m.end()) {
     if( name == "terrain") {
       // texture = loadBMP_custom("/home/larry/mcpe-view/textures/terrain-atlas.bmp");
-      texture = load(root_dir + "textures/terrain-atlas.png");
+      texture = load("/home/larry/smooth/assets/images/terrain-atlas.png");
       m[name] = texture;
     }
   }

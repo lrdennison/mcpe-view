@@ -16,8 +16,11 @@ minedit_SOURCES += texture_atlas.cpp texture_atlas.h
 minedit_SOURCES += texture_factory.cpp texture_factory.h
 minedit_SOURCES += camera.cpp camera.h
 
+minedit_SOURCES += tga.cpp tga.h
+
 
 minedit_SOURCES += block_info.cpp block_info.h
+minedit_SOURCES += block_render.cpp block_render.h
 minedit_SOURCES += packed_block.cpp packed_block.h
 minedit_SOURCES += terrain.cpp terrain.h
 minedit_SOURCES += terrain_chunk.cpp terrain_chunk.h
